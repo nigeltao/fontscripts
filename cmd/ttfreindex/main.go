@@ -27,11 +27,9 @@ var (
 
 func main() {
 	flag.Parse()
-	if *srcFlag == "" {
-		log.Fatal("source TTF filename not specified")
-	}
-	if *dstFlag == "" {
-		log.Fatal("destination TTF filename not specified")
+	if *srcFlag == "" || *dstFlag == "" {
+		fmt.Fprintf(os.Stderr, "usage: %s -src filename1.ttf -dst filename2.ttf\n", os.Args[0])
+		os.Exit(1)
 	}
 	dst, src := *dstFlag, *srcFlag
 
@@ -58,6 +56,7 @@ func main() {
 	if err := exec.Command("ttx", "-o", dst, tmp).Run(); err != nil {
 		log.Fatalf("ttx (dst): %v", err)
 	}
+	fmt.Printf("Wrote %s\n", dst)
 }
 
 const notSeen rune = 0x7fffffff
